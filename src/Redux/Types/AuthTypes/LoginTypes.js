@@ -1,0 +1,1 @@
+export const LOGIN_EMAIL_TYPES = 'LOGIN_EMAIL_TYPES';

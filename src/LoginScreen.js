@@ -5,15 +5,45 @@ import {
   StyleSheet,
   TextInput,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
+import {useSelector, useDispatch} from 'react-redux';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {LoginManager, AccessToken} from 'react-native-fbsdk-next';
-import {initializeApp} from 'firebase/app';
-import {getAnalytics} from 'firebase/analytics';
+import {useNavigation} from '@react-navigation/native';
+import {Login_email_actions} from './Redux';
+import ToastMessage from './Redux/Actions/ToastMessages/ToastMessage';
+// import {initializeApp} from 'firebase/app';
+// import {getDatabase, get} from 'firebase/firestore';
+
 export default function LoginScreen({navigation}) {
   const [username, setUsername] = useState('');
+
+  const Navigation = useNavigation();
+  const dispatch = useDispatch();
+
+  // const firebaseConfig = {
+  //   apiKey: 'AIzaSyAfvmPvgbtoUJ3VEvRYkLRnxqGb-e4ztrI',
+
+  //   authDomain: 'authchatsajib.firebaseapp.com',
+
+  //   databaseURL: 'https://authchatsajib-default-rtdb.firebaseio.com',
+
+  //   projectId: 'authchatsajib',
+
+  //   storageBucket: 'authchatsajib.appspot.com',
+
+  //   messagingSenderId: '560776194566',
+
+  //   appId: '1:560776194566:web:09dc9a7e0eaa582e963187',
+
+  //   measurementId: 'G-LN0K898QPB',
+  // };
+
+  // Initialize Firebase
+
+  // initializeApp(firebaseConfig);
 
   async function onFacebookButtonPress() {
     // Attempt login with permissions
@@ -45,7 +75,7 @@ export default function LoginScreen({navigation}) {
 
   GoogleSignin.configure({
     webClientId:
-      '601840133910-th0jfal9789nh5luu4ssfsnkqngg9ut9.apps.googleusercontent.com',
+      '560776194566-jmdnooe2b2aor0497saqa201nelcu5k5.apps.googleusercontent.com',
   });
 
   async function onGoogleButtonPress() {
@@ -59,14 +89,24 @@ export default function LoginScreen({navigation}) {
     return auth().signInWithCredential(googleCredential);
   }
 
+  const getNavigatewithdata = e => {
+    try {
+      // const database = getDatabase();
+    } catch (e) {}
+
+    dispatch(Login_email_actions(e));
+    navigation.navigate('DeshboardScreen');
+    ToastMessage('Successfully login ');
+  };
+
   return (
     <SafeAreaView style={{padding: 10}}>
       <View style={{marginVertical: 30}}>
         <TouchableOpacity
           onPress={() => {
             onFacebookButtonPress().then(e => {
-              console.warn(e);
-              navigation.navigate('DeshboardScreen', {data: username});
+              // console.warn(e);
+              navigation.navigate('DeshboardScreen', {name: 'sajib'});
             });
           }}>
           <View
@@ -83,10 +123,7 @@ export default function LoginScreen({navigation}) {
 
       <TouchableOpacity
         onPress={() => {
-          onGoogleButtonPress().then(e => {
-            console.warn(e);
-            // navigation.navigate('DeshboardScreen',{data:username})
-          });
+          onGoogleButtonPress().then(e => getNavigatewithdata(e));
         }}>
         <View
           style={{
