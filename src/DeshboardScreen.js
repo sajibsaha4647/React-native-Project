@@ -9,9 +9,13 @@ export default function DeshboardScreen({route}) {
   const result = useSelector(state => state.Login);
 
   const [messages, setMessages] = useState([]);
+  const [userid, setuserid] = useState([]);
 
   useEffect(() => {
-    console.log(result.successData.additionalUserInfo.profile, 'here  result');
+    console.log(
+      result.successData.additionalUserInfo.profile.iat,
+      'here  result',
+    );
   }, []);
 
   useEffect(() => {
@@ -45,7 +49,7 @@ export default function DeshboardScreen({route}) {
       messages={messages}
       onSend={messages => onSend(messages)}
       user={{
-        _id: 1,
+        _id: result.successData.additionalUserInfo.profile.iat,
       }}
     />
   );
